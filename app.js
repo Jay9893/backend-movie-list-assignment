@@ -1,11 +1,13 @@
 require('dotenv').config();
 const express = require('express');
 const moviesRouter = require('./routes/movies');
+var cors = require('cors')
 const userRouter = require("./routes/user")
 const connectToDatabase = require('./db/connection');
 const app = express();
 
 app.use(express.json());
+app.use(cors())
 
 // Add more routes and configurations as needed
 
