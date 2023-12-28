@@ -14,7 +14,7 @@ app.use(cors())
 // Connect to the database
 connectToDatabase();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3100;
 
 app.get("/",(req,res)=>{
     res.send("helelo ")

@@ -10,8 +10,8 @@ const upload = require("../middlewares/multer");
 router.post("/", upload.single("image"), async (req, res) => {
   try {
     const { title, publishingYear } = req.body;
-    const imageBuffer = req.file.buffer;
-
+    
+    const imageBuffer = fs.readFileSync(req.file.path);
     if (!title || !publishingYear) {
       return res
         .status(400)
@@ -59,8 +59,8 @@ router.get("/", async (req, res) => {
 router.put("/:id", upload.single("image"), async (req, res) => {
   try {
     const { title, publishingYear } = req.body;
-    const imageBuffer = req.file.buffer;
 
+    const imageBuffer = fs.readFileSync(req.file.path);
     if (!title || !publishingYear) {
       return res
         .status(400)
@@ -119,15 +119,15 @@ router.get("/:id", async (req, res) => {
 router.get('/image/:id', async (req, res) => {
   try {
     const { id } = req.params;
-
+    
     const result = await Movie.findById(id);
-
     if (!result) {
       return res.status(404).json({ success: false, error: 'Movie not found' });
     }
+    
+    res.set('Content-Type', result.image.contentType);
 
-    res.setHeader('Content-Type', result.image.contentType);
-    res.send(result.image.data);
+    return res.send(result.image.data);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ success: false, error: 'Internal Server Error' });
